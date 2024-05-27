@@ -15,11 +15,6 @@ app = Flask(__name__)
 
 app.url_map.strict_slashes = False
 
-# flask server environmental setup
-host = os.getenv('BTCPBNB_API_HOST', '0.0.0.0')
-port = os.getenv('BTCPBNB_API_PORT', 5001)
-
-# Cross-Origin Resource Sharing
 cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
 # app_views BluePrint defined in api.v1.views
@@ -83,11 +78,13 @@ def setup_global_errors():
         app.register_error_handler(cls, global_error_handler)
 
 
-if __name__ == "__main__":
-    """
-    MAIN Flask App
-    """
-    # initializes global error handling
-    setup_global_errors()
-    # start Flask app
-    app.run(host=host, port=port)
+if __name__ == '__main__':
+    if getenv("HBNB_API_HOST") is None:
+        HBNB_API_HOST = '0.0.0.0'
+    else:
+        HBNB_API_HOST = getenv("HBNB_API_HOST")
+    if getenv("HBNB_API_PORT") is None:
+        HBNB_API_PORT = 5000
+    else:
+        HBNB_API_PORT = int(getenv("HBNB_API_PORT"))
+    app.run(host=HBNB_API_HOST, port=HBNB_API_PORT, threaded=True)
