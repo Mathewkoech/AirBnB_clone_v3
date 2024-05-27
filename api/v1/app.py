@@ -1,15 +1,6 @@
-#!/usr/bin/python3
-"""
-flask app
-"""
-from flask import Flask, make_response, jsonify
-from models import storage
-from api.v1.views import app_views
-from os import getenv
-
-
-app = Flask(__name__)
+app.config['JSONIFY_PRETTYPRINT_REGULAR'] = True
 app.register_blueprint(app_views)
+cors = CORS(app, resources={r"/api/*": {"origins": "0.0.0.0"}})
 
 
 @app.teardown_appcontext
@@ -21,7 +12,7 @@ def call(self):
 @app.errorhandler(404)
 def error(error):
     """ handles 404 error and gives a json response"""
-    return make_response(jsonify({'error': "Not found"}), 404)
+    return make_response(jsonify({'error': 'Not found'}), 404)
 
 
 if __name__ == '__main__':
